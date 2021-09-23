@@ -80,6 +80,7 @@ const HomeScreens = () => {
     );
 };
 
+let a= 1;
 const ProfileScreens = () => {
     return (
         <Stack.Navigator headerMode={false}>
