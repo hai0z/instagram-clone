@@ -11,9 +11,10 @@ const ThemeProvider = ({ children }) => {
 
         if (data) {
             setTheme(JSON.parse(data));
+            console.log(typeof data);
             setIsLoadingTheme(false);
-        } else
-            return {
+        } else {
+            setTheme({
                 isLightTheme: true,
                 light: {
                     textColor: "#000",
@@ -23,7 +24,9 @@ const ThemeProvider = ({ children }) => {
                     textColor: "#fff",
                     backgroundColor: "#000",
                 },
-            };
+            });
+            setIsLoadingTheme(false);
+        }
     });
 
     React.useEffect(() => {

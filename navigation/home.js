@@ -115,26 +115,28 @@ export default function HomeNavigator() {
     const { isLightTheme, light, dark } = theme;
 
     const textColor = isLightTheme ? light.textColor : dark.textColor;
+
     const [nofication, setNofication] = useState([]);
+
     const backgroundColor = isLightTheme
         ? light.backgroundColor
         : dark.backgroundColor;
 
     useEffect(() => {
-        const getNofication = () => {
-            db.collection("nofication")
-                .doc(auth.currentUser.uid)
-                .collection("userNofication")
-                .where("seen", "==", false)
-                .onSnapshot((snapShot) => {
-                    const nofi = snapShot.docs.map((doc) => {
-                        const id = doc.id;
-                        return { id, ...doc.data() };
-                    });
-                    setNofication(nofi);
-                });
-        };
-        getNofication();
+        // const getNofication = () => {
+        //     db.collection("nofication")
+        //         .doc(auth.currentUser.uid)
+        //         .collection("userNofication")
+        //         .where("seen", "==", false)
+        //         .onSnapshot((snapShot) => {
+        //             const nofi = snapShot.docs.map((doc) => {
+        //                 const id = doc.id;
+        //                 return { id, ...doc.data() };
+        //             });
+        //             setNofication(nofi);
+        //         });
+        // };
+        // getNofication();
     }, []);
     return (
         <Tab.Navigator
