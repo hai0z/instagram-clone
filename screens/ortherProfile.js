@@ -97,11 +97,11 @@ const Library = ({ navigation }) => {
         ? light.backgroundColor
         : dark.backgroundColor;
 
-    const onOpen = (url, owner) => {
+    function onOpen(url, owner) {
         setShowModal(true);
         setImgView(url);
         setOwner(owner);
-    };
+    }
     React.useEffect(() => {
         db.collection("posts")
             .where("own.uid", "==", userUid)
@@ -315,7 +315,6 @@ const Profile = ({ navigation }) => {
         <View
             style={{
                 flex: 1,
-                opacity: showModal ? 0.1 : 1,
                 backgroundColor: backgroundColor,
             }}
         >

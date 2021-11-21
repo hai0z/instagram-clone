@@ -8,7 +8,6 @@ const ThemeProvider = ({ children }) => {
 
     const [theme, setTheme] = React.useState(async () => {
         const data = await AsyncStorage.getItem("theme");
-
         if (data) {
             setTheme(JSON.parse(data));
             console.log(typeof data);
