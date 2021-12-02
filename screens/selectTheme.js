@@ -16,21 +16,24 @@ const SelectTheme = ({ navigation }) => {
         : dark.backgroundColor;
 
     const setDarkTheme = async () => {
-        const updateTheme = {
-            ...theme,
-            isLightTheme: false,
-        };
-        setTheme({ ...theme, isLightTheme: false });
-        await AsyncStorage.setItem("theme", JSON.stringify(updateTheme));
+        await AsyncStorage.setItem(
+            "theme",
+            JSON.stringify({
+                ...theme,
+                isLightTheme: false,
+            })
+        );
     };
 
     const setLightTheme = async () => {
-        const updateTheme = {
-            ...theme,
-            isLightTheme: true,
-        };
         setTheme({ ...theme, isLightTheme: true });
-        await AsyncStorage.setItem("theme", JSON.stringify(updateTheme));
+        await AsyncStorage.setItem(
+            "theme",
+            JSON.stringify({
+                ...theme,
+                isLightTheme: true,
+            })
+        );
     };
 
     return (
