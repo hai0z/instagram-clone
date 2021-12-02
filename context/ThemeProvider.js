@@ -6,13 +6,27 @@ export const ThemeContext = React.createContext(undefined);
 const ThemeProvider = ({ children }) => {
     const [isLoadingTheme, setIsLoadingTheme] = React.useState(true);
 
-    const [theme, setTheme] = React.useState(async () => {
-        const data = await AsyncStorage.getItem("theme");
-        if (data) {
-            setTheme(JSON.parse(data));
-            console.log(typeof data);
+    const [theme, setTheme] = React.useState({
+        isLightTheme: true,
+        light: {
+            textColor: "#000",
+            backgroundColor: "#fff",
+        },
+        dark: {
+            textColor: "#fff",
+            backgroundColor: "#000",
+        },
+    });
+
+    const findOldTheme = async () => {
+        const themes = await AsyncStorage.getItem("theme");
+        if (themes != null) {
+            console.log(themes);
             setIsLoadingTheme(false);
+            setTheme(JSON.parse(themes));
         } else {
+            console.log("k co theme");
+            setIsLoadingTheme(false);
             setTheme({
                 isLightTheme: true,
                 light: {
@@ -24,16 +38,11 @@ const ThemeProvider = ({ children }) => {
                     backgroundColor: "#000",
                 },
             });
-            setIsLoadingTheme(false);
         }
-    });
-
+    };
     React.useEffect(() => {
-        const saveTheme = () => {
-            AsyncStorage.setItem("theme", JSON.stringify(theme));
-        };
-        saveTheme();
-    }, [theme]);
+        findOldTheme();
+    }, []);
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme, isLoadingTheme }}>

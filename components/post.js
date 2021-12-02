@@ -24,7 +24,7 @@ import { db, auth } from "../firebase";
 import firebase from "firebase";
 
 const Post = ({ navigation }) => {
-    const { followingPost, setUserUid, user } = useContext(AuthContext);
+    const { followingPost, setUserUid } = useContext(AuthContext);
 
     const [listPost, setListPost] = React.useState([]);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useLayoutEffect } from "react";
 import {
     FlatList,
     Image,
@@ -13,12 +13,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase";
 
 import { AuthContext } from "../context/AuthProvider";
-import firebase from "firebase";
+
+import { GiftedChat } from "react-native-gifted-chat";
 
 const ChatWindow = ({ navigation, route }) => {
     const { data } = route.params;
-
-    const [message, setMessage] = React.useState("");
 
     const { setUserUid, user } = React.useContext(AuthContext);
 
@@ -61,39 +60,33 @@ const ChatWindow = ({ navigation, route }) => {
                 const data = res.docs.map((doc) => {
                     return doc.data();
                 });
-                setListMessage(data.sort((a, b) => a.createdAt > b.createdAt));
+                //setListMessage(data);
             });
     };
 
-    const changeText = React.useCallback((e) => {
-        setMessage(e);
-    }, []);
+    const onSend = useCallback((messages = []) => {
+        setListMessage((previousMessages) =>
+            GiftedChat.append(previousMessages, messages)
+        );
+        const { _id, createdAt, text, user } = messages[0];
+        db.collection("chats").add({ _id, createdAt, text, user });
 
-    const send = () => {
         db.collection("messages")
             .doc(auth.currentUser.uid)
             .collection(data.uid)
-            .add({
-                user,
-                message,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            });
+            .add({ _id, createdAt, text, user });
+
         db.collection("messages")
             .doc(data.uid)
             .collection(auth.currentUser.uid)
-            .add({
-                user,
-                message,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            })
+            .add({ _id, createdAt, text, user })
             .then((r) => console.log(r));
-        setMessage("");
-    };
+    }, []);
 
-    React.useEffect(() => {
-        getFollower();
-        getPost();
-        getMessage();
+    React.useLayoutEffect(() => {
+        // getFollower();
+        // getPost();
+        // getMessage();
     }, []);
 
     return (
@@ -128,152 +121,13 @@ const ChatWindow = ({ navigation, route }) => {
                     style={styles.icon}
                 />
             </View>
-            <FlatList
-                ref={listRef}
-                ListHeaderComponent={() => {
-                    return (
-                        <View style={styles.listHeader}>
-                            <Image
-                                source={{ uri: data.photoURL }}
-                                style={styles.headerAvatar}
-                            />
-                            {data.fullname ? (
-                                <Text
-                                    style={{
-                                        ...styles.displayName,
-                                        fontSize: 18,
-                                        marginTop: 10,
-                                    }}
-                                >
-                                    {data.fullname}
-                                </Text>
-                            ) : (
-                                <Text
-                                    style={{
-                                        ...styles.displayName,
-                                        fontSize: 14,
-                                        marginTop: 10,
-                                    }}
-                                >
-                                    {data.displayName}
-                                </Text>
-                            )}
-                            <Text
-                                style={{
-                                    ...styles.displayName,
-                                    fontSize: 18,
-                                    fontWeight: "normal",
-                                }}
-                            >
-                                {data.displayName} • Instagram{" "}
-                            </Text>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text style={styles.txt}>
-                                    {follower.length} người theo dõi •
-                                </Text>
-                                <Text style={styles.txt}>
-                                    {" "}
-                                    {post.length} bài viết
-                                </Text>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.btn}
-                                onPress={() => {
-                                    setUserUid(data.uid);
-                                    navigation.navigate("OtherProfile");
-                                }}
-                            >
-                                <Text style={{ fontWeight: "bold" }}>
-                                    Xem trang cá nhân
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                    );
-                }}
-                data={listMessage}
-                keyExtractor={(item, index) => index}
-                renderItem={({ item }) => {
-                    return (
-                        <View
-                            style={{
-                                flex: 1,
-                                alignItems:
-                                    item.user.uid === auth.currentUser.uid
-                                        ? "flex-end"
-                                        : "flex-start",
-                                marginHorizontal: 10,
-                                marginVertical: 5,
-                                justifyContent: "flex-end",
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
-                            >
-                                {item.user.uid !== auth.currentUser.uid && (
-                                    <Image
-                                        source={{ uri: item.user.photoURL }}
-                                        style={{
-                                            width: 40,
-                                            height: 40,
-                                            borderColor: "#ccc",
-                                            borderWidth: 0.5,
-                                            borderRadius: 40 / 2,
-                                        }}
-                                    />
-                                )}
-                                <View
-                                    style={{
-                                        backgroundColor: "#efefef",
-                                        minHeight: 35,
-                                        borderRadius: 35 / 2,
-                                        justifyContent: "center",
-                                        maxWidth: 250,
-                                        minWidth: 30,
-                                        marginLeft: 5,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            textAlign: "left",
-                                            padding: 10,
-                                        }}
-                                    >
-                                        {item.message}
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    );
-                }}
+
+            <GiftedChat
+                messages={listMessage}
+                showAvatarForEveryMessage={true}
+                onSend={(messages) => onSend(messages)}
+                user={{ avatar: user.photoURL }}
             />
-            <View style={styles.foodter}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Nhắn tin..."
-                    placeholderTextColor="#ababab"
-                    value={message}
-                    onChangeText={changeText}
-                />
-                <TouchableOpacity
-                    style={{ position: "absolute", right: 30 }}
-                    disabled={!message.trim().length}
-                    onPress={send}
-                >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: "#0097f6",
-                            fontWeight: "bold",
-                            opacity: !message.trim().length ? 0.4 : 1,
-                        }}
-                    >
-                        Gửi
-                    </Text>
-                </TouchableOpacity>
-            </View>
         </View>
     );
 };
@@ -286,7 +140,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     header: {
-        marginTop: 35,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",

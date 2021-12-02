@@ -1,23 +1,26 @@
 {
-  "firestore": {
-    "rules": "no",
-    "indexes": "firestore.indexes.json"
-  },
-  "storage": {
-    "rules": "storage.rules"
-  },
-  "emulators": {
-    "auth": {
-      "port": 9099
-    },
     "firestore": {
-      "port": 8080
+        "rules": "no",
+        "indexes": "firestore.indexes.json"
     },
     "storage": {
-      "port": 9199
+        "rules": "storage.rules"
     },
-    "ui": {
-      "enabled": true
+    "emulators": {
+        "auth": {
+            "port": 9099,
+            "host": "192.168.1.3"
+        },
+        "firestore": {
+            "port": 8080,
+            "host": "192.168.1.3"
+        },
+        "storage": {
+            "port": 9199,
+            "host": "192.168.1.3"
+        },
+        "ui": {
+            "enabled": true
+        }
     }
-  }
 }
