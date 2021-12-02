@@ -49,37 +49,15 @@ const SelectTheme = ({ navigation }) => {
                     activeOpacity={1}
                     onPress={setLightTheme}
                 >
-                    <Text
-                        style={{
-                            color: textColor,
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}
-                    >
+                    <Text style={{ color: textColor, ...styles.themeName }}>
                         Sáng
                     </Text>
                     <TouchableOpacity
                         onPress={setLightTheme}
-                        style={{
-                            height: 25,
-                            width: 25,
-                            backgroundColor: "gray",
-                            borderRadius: 25 / 2,
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
+                        style={styles.circle}
                     >
                         {isLightTheme ? (
-                            <View
-                                style={{
-                                    height: 25,
-                                    width: 25,
-                                    backgroundColor: "#0097f6",
-                                    borderRadius: 25 / 2,
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <View style={styles.circleChecked}>
                                 <Ionicons
                                     name="checkmark"
                                     color={backgroundColor}
@@ -89,10 +67,8 @@ const SelectTheme = ({ navigation }) => {
                         ) : (
                             <View
                                 style={{
-                                    height: 22,
-                                    width: 22,
+                                    ...styles.circleUnChecked,
                                     backgroundColor: backgroundColor,
-                                    borderRadius: 22 / 2,
                                 }}
                             />
                         )}
@@ -103,37 +79,15 @@ const SelectTheme = ({ navigation }) => {
                     activeOpacity={1}
                     onPress={setDarkTheme}
                 >
-                    <Text
-                        style={{
-                            color: textColor,
-                            fontSize: 16,
-                            fontWeight: "500",
-                        }}
-                    >
+                    <Text style={{ color: textColor, ...styles.themeName }}>
                         Tối
                     </Text>
                     <TouchableOpacity
                         onPress={setDarkTheme}
-                        style={{
-                            height: 25,
-                            width: 25,
-                            backgroundColor: "gray",
-                            borderRadius: 25 / 2,
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
+                        style={styles.circle}
                     >
                         {!isLightTheme ? (
-                            <View
-                                style={{
-                                    height: 25,
-                                    width: 25,
-                                    backgroundColor: "#0097f6",
-                                    borderRadius: 25 / 2,
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
+                            <View style={styles.circleChecked}>
                                 <Ionicons
                                     name="checkmark"
                                     color={backgroundColor}
@@ -143,10 +97,8 @@ const SelectTheme = ({ navigation }) => {
                         ) : (
                             <View
                                 style={{
-                                    height: 22,
-                                    width: 22,
+                                    ...styles.circleUnChecked,
                                     backgroundColor: backgroundColor,
-                                    borderRadius: 22 / 2,
                                 }}
                             />
                         )}
@@ -183,5 +135,31 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         justifyContent: "space-between",
         alignItems: "center",
+    },
+    circle: {
+        height: 25,
+        width: 25,
+        backgroundColor: "gray",
+        borderRadius: 25 / 2,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    circleChecked: {
+        height: 25,
+        width: 25,
+        backgroundColor: "#0097f6",
+        borderRadius: 25 / 2,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    circleUnChecked: {
+        height: 22,
+        width: 22,
+
+        borderRadius: 22 / 2,
+    },
+    themeName: {
+        fontWeight: "500",
+        fontSize: 16,
     },
 });
