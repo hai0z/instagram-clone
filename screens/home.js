@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
     View,
     Text,
@@ -14,8 +14,7 @@ import Post from "../components/post";
 import Header from "../components/header";
 
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
-import { color } from "react-native-elements/dist/helpers";
+import useTheme from "../service/useTheme";
 
 export default function Home({ navigation }) {
     const data = [
@@ -61,15 +60,8 @@ export default function Home({ navigation }) {
         },
     ];
 
-    const { theme } = useContext(ThemeContext);
+    const { textColor, backgroundColor } = useTheme();
 
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
     const wait = (timeout) => {
         return new Promise((resolve) => setTimeout(resolve, timeout));
     };

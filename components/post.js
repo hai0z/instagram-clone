@@ -15,28 +15,20 @@ import { formatDistance } from "date-fns";
 import vi from "date-fns/locale/vi";
 
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
 
 let width = Dimensions.get("window").width;
 let height = Dimensions.get("window").height;
 
 import { db, auth } from "../firebase";
 import firebase from "firebase";
+import useTheme from "../service/useTheme";
 
 const Post = ({ navigation }) => {
     const { followingPost, setUserUid } = useContext(AuthContext);
 
     const [listPost, setListPost] = React.useState([]);
 
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor } = useTheme();
 
     React.useEffect(() => {
         setListPost(followingPost);

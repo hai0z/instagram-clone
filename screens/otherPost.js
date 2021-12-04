@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
     View,
     Text,
@@ -19,26 +19,18 @@ import firebase from "firebase";
 const { width } = Dimensions.get("window");
 
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
+import useTheme from "../service/useTheme";
 
 export default function MyPost({ navigation, route }) {
     const { index } = route.params;
 
     const { userUid } = React.useContext(AuthContext);
 
-    const postIndex = React.createRef();
+    const postIndex = React.useRef();
 
     const [PostData, setPostData] = React.useState([]);
 
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor, isLightTheme } = useTheme();
 
     const likePost = (postId) => {
         const postRef = db.collection("posts").doc(postId);

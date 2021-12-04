@@ -1,19 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { ThemeContext } from "../context/ThemeProvider";
+import useTheme from "../service/useTheme";
+
 import { auth, db } from "../firebase";
 
 const Activity = () => {
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
-
+    const { textColor, backgroundColor } = useTheme();
     const [nofication, setNofication] = useState([]);
 
     useEffect(() => {

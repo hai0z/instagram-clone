@@ -4,38 +4,50 @@ import { Ionicons } from "@expo/vector-icons";
 import { ThemeContext } from "../context/ThemeProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import useTheme from "../service/useTheme";
+
+const CustomCheckBox = ({ active, onPress }) => {
+    const { backgroundColor } = useTheme();
+
+    return (
+        <TouchableOpacity onPress={onPress} style={styles.circle}>
+            {active ? (
+                <View style={styles.circleChecked}>
+                    <Ionicons
+                        name="checkmark"
+                        color={backgroundColor}
+                        size={20}
+                    />
+                </View>
+            ) : (
+                <View
+                    style={{
+                        ...styles.circleUnChecked,
+                        backgroundColor: backgroundColor,
+                    }}
+                />
+            )}
+        </TouchableOpacity>
+    );
+};
 const SelectTheme = ({ navigation }) => {
     const { theme, setTheme } = useContext(ThemeContext);
 
-    const { isLightTheme, light, dark } = theme;
+    const { textColor, backgroundColor, isLightTheme } = useTheme();
 
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
-
-    const setDarkTheme = async () => {
+    const changeTheme = async (themeMode) => {
+        setTheme({
+            ...theme,
+            isLightTheme: themeMode === "light" ? true : false,
+        });
         await AsyncStorage.setItem(
             "theme",
             JSON.stringify({
                 ...theme,
-                isLightTheme: false,
+                isLightTheme: themeMode === "light" ? true : false,
             })
         );
     };
-
-    const setLightTheme = async () => {
-        setTheme({ ...theme, isLightTheme: true });
-        await AsyncStorage.setItem(
-            "theme",
-            JSON.stringify({
-                ...theme,
-                isLightTheme: true,
-            })
-        );
-    };
-
     return (
         <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
             <View style={styles.header}>
@@ -50,62 +62,28 @@ const SelectTheme = ({ navigation }) => {
                 <TouchableOpacity
                     style={styles.btn}
                     activeOpacity={1}
-                    onPress={setLightTheme}
+                    onPress={() => changeTheme("light")}
                 >
                     <Text style={{ color: textColor, ...styles.themeName }}>
                         Sáng
                     </Text>
-                    <TouchableOpacity
-                        onPress={setLightTheme}
-                        style={styles.circle}
-                    >
-                        {isLightTheme ? (
-                            <View style={styles.circleChecked}>
-                                <Ionicons
-                                    name="checkmark"
-                                    color={backgroundColor}
-                                    size={20}
-                                />
-                            </View>
-                        ) : (
-                            <View
-                                style={{
-                                    ...styles.circleUnChecked,
-                                    backgroundColor: backgroundColor,
-                                }}
-                            />
-                        )}
-                    </TouchableOpacity>
+                    <CustomCheckBox
+                        active={isLightTheme}
+                        onPress={() => changeTheme("light")}
+                    />
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.btn}
                     activeOpacity={1}
-                    onPress={setDarkTheme}
+                    onPress={() => changeTheme("dark")}
                 >
                     <Text style={{ color: textColor, ...styles.themeName }}>
                         Tối
                     </Text>
-                    <TouchableOpacity
-                        onPress={setDarkTheme}
-                        style={styles.circle}
-                    >
-                        {!isLightTheme ? (
-                            <View style={styles.circleChecked}>
-                                <Ionicons
-                                    name="checkmark"
-                                    color={backgroundColor}
-                                    size={20}
-                                />
-                            </View>
-                        ) : (
-                            <View
-                                style={{
-                                    ...styles.circleUnChecked,
-                                    backgroundColor: backgroundColor,
-                                }}
-                            />
-                        )}
-                    </TouchableOpacity>
+                    <CustomCheckBox
+                        active={!isLightTheme}
+                        onPress={() => changeTheme("dark")}
+                    />
                 </TouchableOpacity>
             </View>
         </View>

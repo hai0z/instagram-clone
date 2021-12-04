@@ -17,7 +17,7 @@ import { Octicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
+
 import { auth, db } from "../firebase";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -28,21 +28,15 @@ import ImageModal from "../components/imagePreview";
 
 import SettingModal from "../components/settingModal";
 
+import useTheme from "../service/useTheme";
+
 const Tab = createMaterialTopTabNavigator();
 
 let width = Dimensions.get("window").width;
 let imgWidth = width / 3.05;
 
 const MyTabs = () => {
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor } = useTheme();
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -74,7 +68,7 @@ const MyTabs = () => {
                 activeTintColor: textColor,
             }}
         >
-            <Tab.Screen name="Lib" component={Library} options={{}} />
+            <Tab.Screen name="Lib" component={Library} />
             <Tab.Screen name="Tag" component={My} />
         </Tab.Navigator>
     );
@@ -86,13 +80,7 @@ const Library = ({ navigation }) => {
     const [imgView, setImgView] = useState(null);
     const [owner, setOwner] = useState(null);
 
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { backgroundColor } = useTheme();
 
     function onOpen(url, owner) {
         setShowModal(true);
@@ -191,15 +179,7 @@ const Profile = ({ navigation }) => {
 
     const [showDiscover, setShowDiscover] = useState(false);
 
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor } = useTheme();
 
     const { user, setUserUid } = useContext(AuthContext);
     const [totalPost, setTotalPost] = React.useState([]);

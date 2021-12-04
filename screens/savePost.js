@@ -14,7 +14,8 @@ import firebase from "firebase";
 import { storage, auth, db } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
+import useTheme from "../service/useTheme";
+
 const SavePost = ({ navigation, route }) => {
     const { user } = React.useContext(AuthContext);
 
@@ -24,15 +25,7 @@ const SavePost = ({ navigation, route }) => {
 
     const [loading, setLoading] = React.useState(false);
 
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor, isLightTheme } = useTheme();
 
     const uploadImage = async () => {
         setLoading(true);
