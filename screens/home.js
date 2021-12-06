@@ -122,7 +122,7 @@ export default function Home({ navigation }) {
                             Tin của bạn
                         </Text>
                     </View>
-                    {data.map((item, index) => (
+                    {data?.map((item, index) => (
                         <TouchableOpacity
                             activeOpacity={1}
                             key={index}

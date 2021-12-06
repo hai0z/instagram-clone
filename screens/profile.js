@@ -32,7 +32,7 @@ import useTheme from "../service/useTheme";
 
 const Tab = createMaterialTopTabNavigator();
 
-let width = Dimensions.get("window").width;
+let { width } = Dimensions.get("window");
 let imgWidth = width / 3.05;
 
 const MyTabs = () => {

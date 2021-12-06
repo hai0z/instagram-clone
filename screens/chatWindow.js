@@ -1,13 +1,5 @@
 import React, { useCallback, useLayoutEffect } from "react";
-import {
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase";
@@ -19,7 +11,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 const ChatWindow = ({ navigation, route }) => {
     const { data } = route.params;
 
-    const { setUserUid, user } = React.useContext(AuthContext);
+    const { user } = React.useContext(AuthContext);
 
     const [follower, setFollower] = React.useState([]);
 
@@ -27,7 +19,7 @@ const ChatWindow = ({ navigation, route }) => {
 
     const listRef = React.useRef(null);
 
-    const [listMessage, setListMessage] = React.useState([]);
+    const [messages, setMessages] = React.useState([]);
     const getFollower = () => {
         db.collection("follow")
             .doc(data.uid)
@@ -52,24 +44,11 @@ const ChatWindow = ({ navigation, route }) => {
             });
     };
 
-    const getMessage = () => {
-        db.collection("messages")
-            .doc(auth.currentUser.uid)
-            .collection(data.uid)
-            .onSnapshot((res) => {
-                const data = res.docs.map((doc) => {
-                    return doc.data();
-                });
-                //setListMessage(data);
-            });
-    };
-
     const onSend = useCallback((messages = []) => {
-        setListMessage((previousMessages) =>
+        setMessages((previousMessages) =>
             GiftedChat.append(previousMessages, messages)
         );
         const { _id, createdAt, text, user } = messages[0];
-        db.collection("chats").add({ _id, createdAt, text, user });
 
         db.collection("messages")
             .doc(auth.currentUser.uid)
@@ -79,14 +58,28 @@ const ChatWindow = ({ navigation, route }) => {
         db.collection("messages")
             .doc(data.uid)
             .collection(auth.currentUser.uid)
-            .add({ _id, createdAt, text, user })
-            .then((r) => console.log(r));
+            .add({ _id, createdAt, text, user });
     }, []);
 
     React.useLayoutEffect(() => {
-        // getFollower();
-        // getPost();
-        // getMessage();
+        const unsubcrible = db
+            .collection("messages")
+            .doc(auth.currentUser.uid)
+            .collection(data.uid)
+            .orderBy("createdAt", "desc")
+            .onSnapshot((snapshot) =>
+                setMessages(
+                    snapshot.docs.map((doc) => ({
+                        _id: doc.data()._id,
+                        createdAt: doc.data().createdAt.toDate(),
+                        text: doc.data().text,
+                        user: doc.data().user,
+                    }))
+                )
+            );
+        return () => {
+            unsubcrible();
+        };
     }, []);
 
     return (
@@ -123,10 +116,9 @@ const ChatWindow = ({ navigation, route }) => {
             </View>
 
             <GiftedChat
-                messages={listMessage}
-                showAvatarForEveryMessage={true}
+                messages={messages}
                 onSend={(messages) => onSend(messages)}
-                user={{ avatar: user.photoURL }}
+                user={{ avatar: user?.photoURL, _id: user.uid }}
             />
         </View>
     );
