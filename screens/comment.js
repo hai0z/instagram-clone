@@ -15,8 +15,12 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+
 import { db } from "../firebase";
 import { AuthContext } from "../context/AuthProvider";
+
+import useTheme from "../service/useTheme";
+import formatDate from "../service/formatdate";
 
 let width = Dimensions.get("window").width;
 
@@ -33,15 +37,15 @@ const Comment = ({ navigation, route }) => {
 
     const { textColor, backgroundColor, isLightTheme } = useTheme();
 
-    const getComment = () => {
-        postRef.onSnapshot((doc) => {
-            const { comment } = doc.data();
-            setListComment(comment);
-            setLoading(false);
-        });
-    };
     React.useEffect(() => {
-        getComment();
+        const unsubcrible = () => {
+            postRef.onSnapshot((doc) => {
+                const { comment } = doc.data();
+                setListComment(comment);
+                setLoading(false);
+            });
+        };
+        return unsubcrible();
     }, []);
 
     const changeText = React.useCallback((e) => {
@@ -51,18 +55,17 @@ const Comment = ({ navigation, route }) => {
     const postComment = () => {
         postRef.get().then((doc) => {
             const { comment } = doc.data();
-            postRef
-                .update({
-                    comment: [
-                        ...comment,
-                        {
-                            displayName: user.displayName,
-                            comment: commentValue,
-                            photoURL: user.photoURL,
-                        },
-                    ],
-                })
-                .then(() => console.log("ok"));
+            postRef.update({
+                comment: [
+                    ...comment,
+                    {
+                        displayName: user.displayName,
+                        comment: commentValue,
+                        photoURL: user.photoURL,
+                        createdAt: new Date(),
+                    },
+                ],
+            });
         });
         setCommentValue("");
     };
@@ -180,7 +183,9 @@ const Comment = ({ navigation, route }) => {
                                                         fontSize: 12,
                                                     }}
                                                 >
-                                                    vừa xong
+                                                    {formatDate(
+                                                        item.createdAt?.seconds
+                                                    )}
                                                 </Text>
                                                 <Text
                                                     style={{

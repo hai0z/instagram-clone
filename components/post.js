@@ -11,8 +11,7 @@ import {
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { formatDistance } from "date-fns";
-import vi from "date-fns/locale/vi";
+import formatDate from "../service/formatdate";
 
 import { AuthContext } from "../context/AuthProvider";
 
@@ -69,26 +68,8 @@ const Post = ({ navigation }) => {
             .catch((err) => console.log(err));
     };
 
-    function formatDate(seconds) {
-        let formattedDate = "";
-
-        if (seconds) {
-            formattedDate = formatDistance(
-                new Date(seconds * 1000),
-                new Date(),
-                {
-                    locale: vi,
-                }
-            );
-
-            formattedDate =
-                formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
-        }
-
-        return formattedDate;
-    }
     return (
-        <View style={{ ...styles.container, backgroundColor: backgroundColor }}>
+        <View style={{ ...styles.container, backgroundColor }}>
             {listPost.length <= 0 ? (
                 <View
                     style={{
