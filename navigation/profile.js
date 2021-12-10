@@ -1,5 +1,5 @@
 import React from "react";
-import Profile from "../screens/profile";
+import Profile from "../screens/profiles/profile";
 import MyPost from "../screens/myPost";
 import {
     createStackNavigator,

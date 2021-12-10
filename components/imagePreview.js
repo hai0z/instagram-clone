@@ -19,6 +19,9 @@ const ImgaeModal = ({ modalVisible, img, owner }) => {
 
     const textColor = isLightTheme ? light.textColor : dark.textColor;
 
+    React.useEffect(() => {
+        console.log(1);
+    }, []);
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -70,7 +73,7 @@ const ImgaeModal = ({ modalVisible, img, owner }) => {
                                 source={{ uri: img }}
                                 style={{
                                     width: width - 15,
-                                    height: height / 2.25,
+                                    height: height / 2.45,
                                     marginTop: 5,
                                 }}
                             />
@@ -81,6 +84,7 @@ const ImgaeModal = ({ modalVisible, img, owner }) => {
                                 justifyContent: "space-between",
                                 width: "100%",
                                 marginTop: 10,
+                                alignItems: "center",
                             }}
                         >
                             <AntDesign
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     modalView: {
         width: width - 10,
 
-        borderRadius: 20,
+        borderRadius: 12,
         alignItems: "center",
 
         shadowOffset: {

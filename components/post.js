@@ -15,12 +15,11 @@ import formatDate from "../service/formatdate";
 
 import { AuthContext } from "../context/AuthProvider";
 
-let width = Dimensions.get("window").width;
-let height = Dimensions.get("window").height;
-
 import { db, auth } from "../firebase";
 import firebase from "firebase";
 import useTheme from "../service/useTheme";
+
+let { width, height } = Dimensions.get("window");
 
 const Post = ({ navigation }) => {
     const { followingPost, setUserUid } = useContext(AuthContext);
@@ -50,19 +49,15 @@ const Post = ({ navigation }) => {
             .then((doc) => {
                 if (doc.exists) {
                     const { like } = doc.data();
-                    if (like.includes(auth.currentUser.uid)) {
-                        postRef.update({
-                            like: firebase.firestore.FieldValue.arrayRemove(
-                                auth.currentUser.uid
-                            ),
-                        });
-                    } else {
-                        postRef.update({
-                            like: firebase.firestore.FieldValue.arrayUnion(
-                                auth.currentUser.uid
-                            ),
-                        });
-                    }
+                    postRef.update({
+                        like: like.includes(auth.currentUser.uid)
+                            ? firebase.firestore.FieldValue.arrayRemove(
+                                  auth.currentUser.uid
+                              )
+                            : firebase.firestore.FieldValue.arrayUnion(
+                                  auth.currentUser.uid
+                              ),
+                    });
                 }
             })
             .catch((err) => console.log(err));

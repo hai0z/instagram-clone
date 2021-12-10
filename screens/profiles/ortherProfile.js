@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import PeopleDiscover from "../components/peopleDiscover";
+import PeopleDiscover from "../../components/peopleDiscover";
 import {
     Image,
     ScrollView,
@@ -15,14 +15,14 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { AuthContext } from "../context/AuthProvider";
-import { auth, db } from "../firebase";
+import { AuthContext } from "../../context/AuthProvider";
+import { auth, db } from "../../firebase";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
-import { ModalContext } from "../context/ModalProvider";
-import { ThemeContext } from "../context/ThemeProvider";
+import { ModalContext } from "../../context/ModalProvider";
+import { ThemeContext } from "../../context/ThemeProvider";
 
-import ImageModal from "../components/imagePreview";
+import ImageModal from "../../components/imagePreview";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -99,8 +99,8 @@ const Library = ({ navigation }) => {
 
     function onOpen(url, owner) {
         setShowModal(true);
-        setImgView(url);
-        setOwner(owner);
+        setImgView(() => url);
+        setOwner(() => owner);
     }
     React.useEffect(() => {
         db.collection("posts")
@@ -150,7 +150,11 @@ const Library = ({ navigation }) => {
                     {userPostData.map((item, index) => (
                         <View key={index}>
                             <TouchableOpacity
-                                onPressOut={() => setShowModal(false)}
+                                onPressOut={() => {
+                                    setShowModal(false);
+                                    setOwner(null);
+                                    setImgView(null);
+                                }}
                                 onLongPress={() => onOpen(item.url, item.own)}
                                 delayLongPress={200}
                                 activeOpacity={1}
@@ -206,8 +210,6 @@ const Profile = ({ navigation }) => {
 
     const [userProfile, setUserProfile] = useState({});
     const [showDiscover, setShowDiscover] = useState(false);
-
-    const { showModal } = useContext(ModalContext);
 
     const { userUid, setUserUid } = useContext(AuthContext);
 

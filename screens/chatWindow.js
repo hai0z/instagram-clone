@@ -136,7 +136,6 @@ const ChatWindow = ({ navigation, route }) => {
                 renderComposer={(props) => <RenderComposer {...props} />}
                 placeholder="Nhắn tin..."
                 infiniteScroll
-                isTyping={true}
             />
         </View>
     );

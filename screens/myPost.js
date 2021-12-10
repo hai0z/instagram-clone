@@ -91,7 +91,11 @@ export default function MyPost({ navigation, route }) {
     };
 
     React.useEffect(() => {
-        postIndex.current.scrollTo({ y: index * width * 1.25 });
+        postIndex.current.scrollTo({
+            x: 0,
+            y: index * width * 1.25,
+            animated: true,
+        });
     }, []);
 
     return (

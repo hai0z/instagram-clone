@@ -7,7 +7,7 @@ import Activity from "../screens/activity";
 import Profile from "./profile";
 import Reels from "../screens/reels";
 import Search from "../screens/search";
-import OtherProfile from "../screens/ortherProfile";
+import OtherProfile from "../screens/profiles/ortherProfile";
 import OtherPost from "../screens/otherPost";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
