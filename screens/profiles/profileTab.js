@@ -138,6 +138,7 @@ const Library = ({ navigation }) => {
                 </View>
             )}
 
+
             <ImageModal
                 modalVisible={showModal}
                 onClose={() => setShowModal(false)}

@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import {
     View,
     Text,
-    ScrollView,
+    FlatList,
     StyleSheet,
     TouchableOpacity,
     Image,
@@ -21,24 +21,14 @@ import firebase from "firebase";
 const width = Dimensions.get("window").width;
 
 import { AuthContext } from "../context/AuthProvider";
-import { ThemeContext } from "../context/ThemeProvider";
+import useTheme from "../service/useTheme";
 import BottomSheet from "../components/bottomSheet";
 
 export default function MyPost({ navigation, route }) {
-    const { theme } = useContext(ThemeContext);
-
-    const { isLightTheme, light, dark } = theme;
-
-    const textColor = isLightTheme ? light.textColor : dark.textColor;
-
-    const backgroundColor = isLightTheme
-        ? light.backgroundColor
-        : dark.backgroundColor;
+    const { textColor, backgroundColor, isLightTheme } = useTheme();
     const { index } = route?.params || 0;
 
     const { userPost } = React.useContext(AuthContext);
-
-    const postIndex = React.useRef();
 
     const [isVisible, setIsVisible] = React.useState(false);
 
@@ -90,14 +80,6 @@ export default function MyPost({ navigation, route }) {
             .catch((err) => console.log(err));
     };
 
-    React.useEffect(() => {
-        postIndex.current.scrollTo({
-            x: 0,
-            y: index * width * 1.25,
-            animated: true,
-        });
-    }, []);
-
     return (
         <View
             style={{
@@ -116,10 +98,12 @@ export default function MyPost({ navigation, route }) {
                     Bài viết
                 </Text>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false} ref={postIndex}>
-                {userPost.map((item, index) => {
+            <FlatList
+                initialScrollIndex={index}
+                data={userPost}
+                renderItem={({ item }) => {
                     return (
-                        <View key={index}>
+                        <View>
                             <View>
                                 <View style={styles.postHeader}>
                                     <Image
@@ -231,8 +215,9 @@ export default function MyPost({ navigation, route }) {
                             </View>
                         </View>
                     );
-                })}
-            </ScrollView>
+                }}
+                keyExtractor={(item) => item.id}
+            />
             <BottomSheet
                 modalVisible={isVisible}
                 onClose={() => setIsVisible(false)}
