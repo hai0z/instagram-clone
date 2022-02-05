@@ -12,7 +12,6 @@ import useTheme from "../service/useTheme";
 
 const RenderInputToolbar = (props) => {
     const { isLightTheme } = useTheme();
-
     return (
         <InputToolbar
             {...props}
@@ -27,7 +26,6 @@ const RenderInputToolbar = (props) => {
 
 const RenderComposer = (props) => {
     const { isLightTheme } = useTheme();
-
     return (
         <Composer
             {...props}

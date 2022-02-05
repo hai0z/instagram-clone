@@ -34,7 +34,6 @@ export default function MyPost({ navigation, route }) {
 
     const likePost = (postId) => {
         const postRef = db.collection("posts").doc(postId);
-
         postRef
             .get()
             .then((doc) => {

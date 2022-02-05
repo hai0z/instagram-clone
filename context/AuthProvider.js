@@ -59,6 +59,7 @@ export default function AuthProvider({ children }) {
                                 const id = doc.id;
                                 return { id, ...data };
                             });
+
                             setFollowingPost(post);
                         });
             });

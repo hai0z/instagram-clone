@@ -251,7 +251,7 @@ const Comment = ({ navigation, route }) => {
                     <TouchableOpacity
                         disabled={commentValue.trim().length <= 0}
                         style={{ marginLeft: "auto" }}
-                        onPress={() => postComment()}
+                        onPress={postComment}
                     >
                         <Text
                             style={{

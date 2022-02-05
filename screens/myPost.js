@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
 import {
     View,
@@ -16,7 +15,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { auth, db } from "../firebase";
-import firebase from "firebase";
+import { arrayUnion, arrayRemove } from "firebase/firestore";
 
 const width = Dimensions.get("window").width;
 
@@ -60,7 +59,6 @@ export default function MyPost({ navigation, route }) {
 
     const likePost = (postId) => {
         const postRef = db.collection("posts").doc(postId);
-
         postRef
             .get()
             .then((doc) => {
@@ -68,12 +66,8 @@ export default function MyPost({ navigation, route }) {
                     const { like } = doc.data();
                     postRef.update({
                         like: like.includes(auth.currentUser.uid)
-                            ? firebase.firestore.FieldValue.arrayRemove(
-                                  auth.currentUser.uid
-                              )
-                            : firebase.firestore.FieldValue.arrayUnion(
-                                  auth.currentUser.uid
-                              ),
+                            ? arrayRemove(auth.currentUser.uid)
+                            : arrayUnion(auth.currentUser.uid),
                     });
                 }
             })

@@ -2,8 +2,8 @@ import React, { useContext } from "react";
 
 import { Modal, StyleSheet, Text, View, Image, Dimensions } from "react-native";
 
-let width = Dimensions.get("window").width;
-let height = Dimensions.get("window").height;
+let { width, height } = Dimensions.get("window");
+
 import * as Animatable from "react-native-animatable";
 
 import { BlurView } from "expo-blur";
@@ -19,9 +19,6 @@ const ImgaeModal = ({ modalVisible, img, owner }) => {
 
     const textColor = isLightTheme ? light.textColor : dark.textColor;
 
-    React.useEffect(() => {
-        console.log(1);
-    }, []);
     return (
         <View style={styles.centeredView}>
             <Modal
@@ -114,10 +111,8 @@ const styles = StyleSheet.create({
     },
     modalView: {
         width: width - 10,
-
         borderRadius: 12,
         alignItems: "center",
-
         shadowOffset: {
             width: 0,
             height: 2,
