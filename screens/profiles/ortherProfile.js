@@ -317,7 +317,7 @@ const Profile = ({ navigation }) => {
         <View
             style={{
                 flex: 1,
-                backgroundColor: backgroundColor,
+                backgroundColor,
             }}
         >
             <View style={styles.header}>

@@ -1,14 +1,5 @@
 import React, { useContext } from "react";
-import {
-    View,
-    Text,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
-    Image,
-    Dimensions,
-    Alert,
-} from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Dimensions, Alert } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -65,9 +56,7 @@ export default function MyPost({ navigation, route }) {
                 if (doc.exists) {
                     const { like } = doc.data();
                     postRef.update({
-                        like: like.includes(auth.currentUser.uid)
-                            ? arrayRemove(auth.currentUser.uid)
-                            : arrayUnion(auth.currentUser.uid),
+                        like: like.includes(auth.currentUser.uid) ? arrayRemove(auth.currentUser.uid) : arrayUnion(auth.currentUser.uid),
                     });
                 }
             })
@@ -82,15 +71,10 @@ export default function MyPost({ navigation, route }) {
             }}
         >
             <View style={styles.header}>
-                <TouchableOpacity
-                    onPress={() => navigation.goBack()}
-                    style={styles.backBtn}
-                >
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
                     <Ionicons name="arrow-back" size={24} color={textColor} />
                 </TouchableOpacity>
-                <Text style={{ ...styles.textHeader, color: textColor }}>
-                    Bài viết
-                </Text>
+                <Text style={{ ...styles.textHeader, color: textColor }}>Bài viết</Text>
             </View>
             <FlatList
                 initialScrollIndex={index}
@@ -100,10 +84,7 @@ export default function MyPost({ navigation, route }) {
                         <View>
                             <View>
                                 <View style={styles.postHeader}>
-                                    <Image
-                                        style={styles.avatar}
-                                        source={{ uri: item.own.photoURL }}
-                                    />
+                                    <Image style={styles.avatar} source={{ uri: item.own.photoURL }} />
                                     <Text
                                         style={{
                                             marginHorizontal: 10,
@@ -123,11 +104,7 @@ export default function MyPost({ navigation, route }) {
                                             marginRight: -5,
                                         }}
                                     >
-                                        <Feather
-                                            name="more-vertical"
-                                            size={20}
-                                            color={textColor}
-                                        />
+                                        <Feather name="more-vertical" size={20} color={textColor} />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={styles.postWrapper}>
@@ -143,9 +120,7 @@ export default function MyPost({ navigation, route }) {
                                                 likePost(item.id);
                                             }}
                                         >
-                                            {item?.like.includes(
-                                                auth?.currentUser?.uid
-                                            ) ? (
+                                            {item?.like.includes(auth?.currentUser?.uid) ? (
                                                 <AntDesign
                                                     name="heart"
                                                     size={24}
@@ -154,22 +129,13 @@ export default function MyPost({ navigation, route }) {
                                                         ...styles.reactIcon,
                                                         transform: [
                                                             {
-                                                                scale:
-                                                                    item.like >
-                                                                    0
-                                                                        ? 1.1
-                                                                        : 1,
+                                                                scale: item.like > 0 ? 1.1 : 1,
                                                             },
                                                         ],
                                                     }}
                                                 />
                                             ) : (
-                                                <AntDesign
-                                                    name="hearto"
-                                                    size={24}
-                                                    color={textColor}
-                                                    style={styles.reactIcon}
-                                                />
+                                                <AntDesign name="hearto" size={24} color={textColor} style={styles.reactIcon} />
                                             )}
                                         </TouchableOpacity>
 
@@ -181,19 +147,10 @@ export default function MyPost({ navigation, route }) {
                                                 })
                                             }
                                         >
-                                            <Feather
-                                                name="message-circle"
-                                                size={24}
-                                                color={textColor}
-                                            />
+                                            <Feather name="message-circle" size={24} color={textColor} />
                                         </TouchableOpacity>
 
-                                        <Feather
-                                            name="send"
-                                            size={24}
-                                            color={textColor}
-                                            style={styles.reactIcon}
-                                        />
+                                        <Feather name="send" size={24} color={textColor} style={styles.reactIcon} />
 
                                         <FontAwesome
                                             name="bookmark-o"
@@ -212,11 +169,7 @@ export default function MyPost({ navigation, route }) {
                 }}
                 keyExtractor={(item) => item.id}
             />
-            <BottomSheet
-                modalVisible={isVisible}
-                onClose={() => setIsVisible(false)}
-                onDelete={deletePost}
-            />
+            <BottomSheet modalVisible={isVisible} onClose={() => setIsVisible(false)} onDelete={deletePost} />
             <View
                 style={{
                     height: 15,

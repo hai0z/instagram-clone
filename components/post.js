@@ -16,7 +16,7 @@ import formatDate from "../service/formatdate";
 import { AuthContext } from "../context/AuthProvider";
 
 import { db, auth } from "../firebase";
-import { arrayUnion, arrayRemove } from "firebase/firestore";
+import firebase from "firebase";
 import useTheme from "../service/useTheme";
 
 let { width, height } = Dimensions.get("window");
@@ -51,8 +51,12 @@ const Post = ({ navigation }) => {
                     const { like } = doc.data();
                     postRef.update({
                         like: like.includes(auth.currentUser.uid)
-                            ? arrayRemove(auth.currentUser.uid)
-                            : arrayUnion(auth.currentUser.uid),
+                            ? firebase.firestore.FieldValue.arrayRemove(
+                                  auth.currentUser.uid
+                              )
+                            : firebase.firestore.FieldValue.arrayUnion(
+                                  auth.currentUser.uid
+                              ),
                     });
                 }
             })

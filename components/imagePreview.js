@@ -2,8 +2,6 @@ import React, { useContext } from "react";
 
 import { Modal, StyleSheet, Text, View, Image, Dimensions } from "react-native";
 
-let { width, height } = Dimensions.get("window");
-
 import * as Animatable from "react-native-animatable";
 
 import { BlurView } from "expo-blur";
@@ -11,6 +9,8 @@ import { BlurView } from "expo-blur";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { ThemeContext } from "../context/ThemeProvider";
+
+let { width, height } = Dimensions.get("window");
 
 const ImgaeModal = ({ modalVisible, img, owner }) => {
     const { theme } = useContext(ThemeContext);

@@ -32,9 +32,7 @@ const SavePost = ({ navigation, route }) => {
         Keyboard.dismiss();
         const response = await fetch(image);
         const blob = await response.blob();
-        const childPath = `posts/${
-            auth.currentUser.uid
-        }/${Math.random().toString(36)}`;
+        const childPath = `posts/${auth.currentUser.uid}/${Math.random().toString(36)}`;
 
         const task = storage.ref().child(childPath).put(blob);
 
@@ -96,10 +94,7 @@ const SavePost = ({ navigation, route }) => {
                 >
                     Bài viết mới
                 </Text>
-                <TouchableOpacity
-                    onPress={() => uploadImage()}
-                    style={{ marginLeft: "auto" }}
-                >
+                <TouchableOpacity onPress={() => uploadImage()} style={{ marginLeft: "auto" }}>
                     {loading ? (
                         <ActivityIndicator size="small" color="#0097f6" />
                     ) : (
@@ -119,12 +114,7 @@ const SavePost = ({ navigation, route }) => {
                     paddingBottom: 10,
                 }}
             >
-                {image && (
-                    <Image
-                        source={{ uri: image }}
-                        style={{ width: 100, height: 100 }}
-                    />
-                )}
+                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
                 <TextInput
                     placeholder="nhập nội dung"
                     style={{ ...styles.input, color: textColor }}
