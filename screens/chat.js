@@ -25,7 +25,6 @@ const Chat = ({ navigation }) => {
     useLayoutEffect(() => {
         const unsubcrible = db
             .collection("users")
-            .where("uid", "!=", auth.currentUser.uid)
             .get()
             .then((res) => {
                 const user = res.docs.map((doc) => {
@@ -33,7 +32,7 @@ const Chat = ({ navigation }) => {
                     const id = doc.id;
                     return { id, ...data };
                 });
-                setListUser(user);
+                setListUser(user.filter((x) => x.id != auth.currentUser.uid));
             });
         return () => unsubcrible;
     }, []);

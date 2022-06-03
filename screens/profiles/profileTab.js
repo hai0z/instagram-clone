@@ -118,7 +118,9 @@ const Library = ({ navigation }) => {
                                 delayLongPress={200}
                                 activeOpacity={1}
                                 onPress={() =>
-                                    navigation.navigate("MyPost", { index })
+                                    navigation.navigate("MyPost", {
+                                        index,
+                                    })
                                 }
                             >
                                 <Image
@@ -137,7 +139,6 @@ const Library = ({ navigation }) => {
                     ))}
                 </View>
             )}
-
 
             <ImageModal
                 modalVisible={showModal}

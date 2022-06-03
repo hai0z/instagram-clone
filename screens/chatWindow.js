@@ -83,9 +83,7 @@ const ChatWindow = ({ navigation, route }) => {
                     }))
                 )
             );
-        return () => {
-            unsubcrible();
-        };
+        return () => unsubcrible;
     }, []);
 
     return (
